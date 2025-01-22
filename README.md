@@ -1,5 +1,23 @@
 # User Management Backend
 
+## Responsibilities
+
+- User registration and authentication  
+- Profile management  
+- Role-based access control  
+- Session management  
+- User preferences  
+
+## Database
+
+- PostgreSQL
+
+## Key Features
+
+- JWT authentication  
+- OAuth integration  
+
+
 <p align="center">
   <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
 </p>
