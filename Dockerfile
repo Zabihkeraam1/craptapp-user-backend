@@ -28,7 +28,7 @@ COPY --from=builder /app/node_modules /app/node_modules
 # COPY .env ./
 
 # Expose the port your application runs on
-EXPOSE 3000
+EXPOSE 8080
 
 # Start the application
 CMD ["node", "dist/main"]
