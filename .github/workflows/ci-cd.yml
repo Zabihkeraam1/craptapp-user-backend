@@ -43,6 +43,12 @@ jobs:
           docker stop craftapp_user_backend_preprod || true
           docker rm craftapp_user_backend_preprod || true
 
+      # Remove previous Docker images
+      - name: Remove previous Docker images
+        run: |
+          docker rmi bitlinksai/craftapp_user_backend:prod || true
+          docker rmi bitlinksai/craftapp_user_backend:preprod || true
+
       # Push the Docker image to Docker Hub
       - name: Push Docker image
         run: |
@@ -56,7 +62,7 @@ jobs:
       - name: Run Docker container
         run: |
           if [ "${{ github.ref }}" == "refs/heads/master" ]; then
-            docker run -d --name craftapp_user_backend_prod -p 8081:3000 bitlinksai/craftapp_user_backend:prod
+            docker run -d --name craftapp_user_backend_prod -p 8081:3000 --restart always bitlinksai/craftapp_user_backend:prod
           elif [ "${{ github.ref }}" == "refs/heads/preprod" ]; then
-            docker run -d --name craftapp_user_backend_preprod -p 8081:3000 bitlinksai/craftapp_user_backend:preprod
+            docker run -d --name craftapp_user_backend_preprod -p 8081:3000 --restart always bitlinksai/craftapp_user_backend:preprod
           fi	
