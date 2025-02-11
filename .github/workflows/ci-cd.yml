@@ -1,0 +1,62 @@
+name: Docker Build and Deploy craftapp_user_backend
+
+on:
+  push:
+    branches:
+      - master
+      - preprod
+  pull_request:
+    branches:
+      - master
+      - preprod
+
+jobs:
+  build-and-deploy:
+    runs-on: self-hosted
+
+    steps:
+      # Check out the repository
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # Log in to Docker Hub
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKER_HUB_USERNAME }}
+          password: ${{ secrets.DOCKER_HUB_TOKEN }}
+
+      # Build the Docker image based on the branch
+      - name: Build Docker image
+        run: |
+          if [ "${{ github.ref }}" == "refs/heads/master" ]; then
+            docker build -t bitlinksai/craftapp_user_backend:prod .
+          elif [ "${{ github.ref }}" == "refs/heads/preprod" ]; then
+            docker build -t bitlinksai/craftapp_user_backend:preprod .
+          fi
+
+      # Stop and remove the previous container (if running)
+      - name: Stop and remove previous container
+        run: |
+          docker stop craftapp_user_backend_prod || true
+          docker rm craftapp_user_backend_prod || true
+          docker stop craftapp_user_backend_preprod || true
+          docker rm craftapp_user_backend_preprod || true
+
+      # Push the Docker image to Docker Hub
+      - name: Push Docker image
+        run: |
+          if [ "${{ github.ref }}" == "refs/heads/master" ]; then
+            docker push bitlinksai/craftapp_user_backend:prod
+          elif [ "${{ github.ref }}" == "refs/heads/preprod" ]; then
+            docker push bitlinksai/craftapp_user_backend:preprod
+          fi
+
+      # Run the Docker container
+      - name: Run Docker container
+        run: |
+          if [ "${{ github.ref }}" == "refs/heads/master" ]; then
+            docker run -d --name craftapp_user_backend_prod -p 3000:3000 bitlinksai/craftapp_user_backend:prod
+          elif [ "${{ github.ref }}" == "refs/heads/preprod" ]; then
+            docker run -d --name craftapp_user_backend_preprod -p 8081:3000 bitlinksai/craftapp_user_backend:preprod
+          fi	
