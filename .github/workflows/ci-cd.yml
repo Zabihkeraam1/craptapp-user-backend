@@ -43,11 +43,11 @@ jobs:
           docker stop craftapp_user_backend_preprod || true
           docker rm craftapp_user_backend_preprod || true
 
-      # Remove previous Docker images
-      - name: Remove previous Docker images
-        run: |
-          docker rmi bitlinksai/craftapp_user_backend:prod || true
-          docker rmi bitlinksai/craftapp_user_backend:preprod || true
+      # # Remove previous Docker images
+      # - name: Remove previous Docker images
+      #   run: |
+      #     docker rmi bitlinksai/craftapp_user_backend:prod || true
+      #     docker rmi bitlinksai/craftapp_user_backend:preprod || true
 
       # Push the Docker image to Docker Hub
       - name: Push Docker image
