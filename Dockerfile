@@ -25,7 +25,7 @@ COPY --from=builder /app/dist /app/dist
 COPY --from=builder /app/node_modules /app/node_modules
 
 # Copy any necessary environment files or configurations
-COPY .env ./
+# COPY .env ./
 
 # Expose the port your application runs on
 EXPOSE 3000
